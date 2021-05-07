@@ -1,5 +1,6 @@
 package br.com.zup.proposta;
 
+import br.com.zup.cartao.Cartao;
 import br.com.zup.proposta.analise.ResultadoAnalise;
 import br.com.zup.proposta.analise.ResultadoAnaliseClient;
 import br.com.zup.proposta.analise.SolicitacaoAnalise;
@@ -37,6 +38,8 @@ public class Proposta {
     private BigDecimal salario;
 
     private StatusSolicitacao statusSolicitacao;
+
+    private String numeroCartao;
 
     @Deprecated
     public Proposta() {}
@@ -94,7 +97,11 @@ public class Proposta {
         }
     }
 
-    private SolicitacaoAnalise solicitacaoAnalise() {
+    public SolicitacaoAnalise solicitacaoAnalise() {
         return new SolicitacaoAnalise(documento, nome, id.toString());
+    }
+
+    public void adicionarCartao(Cartao cartao) {
+        this.numeroCartao = cartao.getId();
     }
 }
