@@ -1,5 +1,10 @@
 package br.com.zup.proposta;
 
+import br.com.zup.proposta.analise.ResultadoAnalise;
+import br.com.zup.proposta.analise.ResultadoAnaliseClient;
+import br.com.zup.proposta.analise.SolicitacaoAnalise;
+import br.com.zup.proposta.analise.TipoResultadoSolicitacao;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +35,8 @@ public class Proposta {
 
     @Column(name = "salario", nullable = false)
     private BigDecimal salario;
+
+    private StatusSolicitacao statusSolicitacao;
 
     @Deprecated
     public Proposta() {}
@@ -64,5 +71,30 @@ public class Proposta {
 
     public BigDecimal getSalario() {
         return salario;
+    }
+
+    public StatusSolicitacao getStatusSolicitacao() {
+        return statusSolicitacao;
+    }
+
+    public void analisar(ResultadoAnaliseClient resultadoAnaliseClient) {
+        ResultadoAnalise resultadoAnalise = null;
+
+        try {
+            SolicitacaoAnalise solicitacaoAnalise = this.solicitacaoAnalise();
+            resultadoAnalise = resultadoAnaliseClient.resultado(solicitacaoAnalise);
+        } catch (Exception e) {
+
+        } finally {
+            if (resultadoAnalise != null) {
+                statusSolicitacao = StatusSolicitacao.ELEGIVEL;
+            } else {
+                statusSolicitacao = StatusSolicitacao.NAO_ELEGIVEL;
+            }
+        }
+    }
+
+    private SolicitacaoAnalise solicitacaoAnalise() {
+        return new SolicitacaoAnalise(documento, nome, id.toString());
     }
 }
