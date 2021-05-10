@@ -125,6 +125,22 @@ services:
     depends_on:
       - prometheus
 
+  diogo-mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - "3306:3306"
+
+  proposta:
+    image: proposta
+    environment:
+      BANCO: diogo-mysql
+    ports:
+      - "8080:8080"
+    depends_on:
+      - diogo-mysql
+
   vault:
     image: vault:1.5.3
     ports:
