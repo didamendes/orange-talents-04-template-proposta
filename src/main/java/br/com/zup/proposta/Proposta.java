@@ -6,10 +6,7 @@ import br.com.zup.proposta.analise.ResultadoAnaliseClient;
 import br.com.zup.proposta.analise.SolicitacaoAnalise;
 import br.com.zup.proposta.analise.TipoResultadoSolicitacao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -39,7 +36,9 @@ public class Proposta {
 
     private StatusSolicitacao statusSolicitacao;
 
-    private String numeroCartao;
+    @OneToOne(cascade=CascadeType.MERGE)
+    @JoinColumn(name = "cartao_id", referencedColumnName = "id")
+    private Cartao cartao;
 
     @Deprecated
     public Proposta() {}
@@ -102,6 +101,6 @@ public class Proposta {
     }
 
     public void adicionarCartao(Cartao cartao) {
-        this.numeroCartao = cartao.getId();
+        this.cartao = cartao;
     }
 }

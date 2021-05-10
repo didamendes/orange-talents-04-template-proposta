@@ -21,6 +21,9 @@ public class CartaoScheduling {
     private CartaoClient cartaoClient;
 
     @Autowired
+    private CartaoRepository cartaoRepository;
+
+    @Autowired
     private PropostaRepository propostaRepository;
 
     private final Logger logger = LoggerFactory.getLogger(CartaoScheduling.class);
@@ -28,7 +31,7 @@ public class CartaoScheduling {
     @Scheduled(cron = "${cron}")
     @Transactional
     public void associarCartao() {
-            List<Proposta> propostas = propostaRepository.findAllByStatusSolicitacaoAndNumeroCartaoIsNull(StatusSolicitacao.ELEGIVEL);
+            List<Proposta> propostas = propostaRepository.findAllByStatusSolicitacaoAndCartaoIsNull(StatusSolicitacao.ELEGIVEL);
             logger.info("Proposta encontradas: " + propostas.size() + " sem cartão gerado.");
 
             if (!propostas.isEmpty()) {
@@ -37,6 +40,8 @@ public class CartaoScheduling {
                         SolicitacaoAnalise solicitacaoAnalise = proposta.solicitacaoAnalise();
                         Cartao cartao = cartaoClient.salvar(solicitacaoAnalise);
                         proposta.adicionarCartao(cartao);
+                        cartaoRepository.save(cartao);
+                        propostaRepository.save(proposta);
                     } catch (Exception e) {
                         logger.error("Error: " + e.getMessage());
                     }
