@@ -40,5 +40,12 @@ public class ErroDeValidacaoHandler {
 		ErroDeFormularioDTO erroDeFormularioDTO = new ErroDeFormularioDTO(ex.getMessage());
 		return erroDeFormularioDTO;
 	}
+
+	@ResponseStatus(code = HttpStatus.NOT_FOUND)
+	@ExceptionHandler(NenhumRegistroEncontado.class)
+	public ErroDeFormularioDTO nenhumRegistroEncontrado(Exception ex) {
+		ErroDeFormularioDTO erroDeFormularioDTO = new ErroDeFormularioDTO(ex.getMessage());
+		return erroDeFormularioDTO;
+	}
 	
 }
