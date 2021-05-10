@@ -37,8 +37,7 @@ public class CartaoScheduling {
             if (!propostas.isEmpty()) {
                 propostas.stream().forEach(proposta -> {
                     try {
-                        SolicitacaoAnalise solicitacaoAnalise = proposta.solicitacaoAnalise();
-                        Cartao cartao = cartaoClient.salvar(solicitacaoAnalise);
+                        Cartao cartao = cartaoClient.consultar(proposta.getId().toString());
                         proposta.adicionarCartao(cartao);
                         cartaoRepository.save(cartao);
                         propostaRepository.save(proposta);

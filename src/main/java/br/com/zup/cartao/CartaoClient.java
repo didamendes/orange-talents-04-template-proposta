@@ -5,13 +5,14 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @FeignClient(name = "cartao", url = "${feign.url.cartao}")
 public interface CartaoClient {
 
-    @RequestMapping(method = POST, value = "/cartoes", produces = MediaType.APPLICATION_JSON_VALUE)
-    Cartao salvar(@RequestBody SolicitacaoAnalise solicitacaoAnalise);
+    @RequestMapping(method = GET, value = "/cartoes", produces = MediaType.APPLICATION_JSON_VALUE)
+    Cartao consultar(@RequestParam("idProposta") String idProposta);
 
 }
