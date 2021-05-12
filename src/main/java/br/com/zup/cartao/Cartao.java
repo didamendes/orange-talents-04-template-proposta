@@ -1,12 +1,10 @@
 package br.com.zup.cartao;
 
 import br.com.zup.biometria.Biometria;
+import br.com.zup.bloqueio.Bloqueio;
 import br.com.zup.proposta.Proposta;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -25,8 +23,14 @@ public class Cartao {
 
     private Integer limite;
 
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.ATIVO;
+
     @OneToMany(mappedBy = "cartao")
     private Set<Biometria> biometrias;
+
+    @OneToMany(mappedBy = "cartao")
+    private Set<Bloqueio> bloqueios;
 
     @OneToOne(mappedBy = "cartao")
     private Proposta proposta;
@@ -49,5 +53,13 @@ public class Cartao {
 
     public Integer getLimite() {
         return limite;
+    }
+
+    public boolean isBloqueado() {
+        return this.status.equals(Status.BLOQUEADO);
+    }
+
+    public void bloquear() {
+        this.status = Status.BLOQUEADO;
     }
 }

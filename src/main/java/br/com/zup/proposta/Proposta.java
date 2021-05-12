@@ -34,6 +34,7 @@ public class Proposta {
     @Column(name = "salario", nullable = false)
     private BigDecimal salario;
 
+    @Enumerated(EnumType.STRING)
     private StatusSolicitacao statusSolicitacao;
 
     @OneToOne(cascade=CascadeType.MERGE)
