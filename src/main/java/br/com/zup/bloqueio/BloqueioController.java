@@ -1,8 +1,14 @@
 package br.com.zup.bloqueio;
 
 import br.com.zup.cartao.Cartao;
+import br.com.zup.cartao.CartaoClient;
 import br.com.zup.cartao.CartaoRepository;
+import br.com.zup.cartao.model.ResultadoBloqueio;
+import br.com.zup.cartao.model.SolicitacaoBloqueio;
 import br.com.zup.exception.NenhumRegistroEncontado;
+import br.com.zup.proposta.PropostaController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 public class BloqueioController {
 
     @Autowired
+    private CartaoClient cartaoClient;
+
+    @Autowired
     private CartaoRepository cartaoRepository;
 
     @Autowired
     private BloqueioResopitory bloqueioResopitory;
+
+    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 
     @PostMapping(path = "/{id}")
     @Transactional
@@ -35,8 +46,14 @@ public class BloqueioController {
             return ResponseEntity.unprocessableEntity().build();
         }
 
-        cartao.bloquear();
-        bloqueioResopitory.save(bloqueio);
+        try {
+            cartaoClient.bloqueio(cartao.getId(), new SolicitacaoBloqueio("Proposta"));
+            cartao.bloquear();
+            bloqueioResopitory.save(bloqueio);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().build();
+        }
 
         return ResponseEntity.ok().build();
     }
