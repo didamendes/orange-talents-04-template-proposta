@@ -3,6 +3,7 @@ package br.com.zup.cartao;
 import br.com.zup.biometria.Biometria;
 import br.com.zup.bloqueio.Bloqueio;
 import br.com.zup.proposta.Proposta;
+import br.com.zup.viagem.AvisoViagem;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -31,6 +32,9 @@ public class Cartao {
 
     @OneToMany(mappedBy = "cartao")
     private Set<Bloqueio> bloqueios;
+
+    @OneToMany(mappedBy = "cartao")
+    private Set<AvisoViagem> avisoViagems;
 
     @OneToOne(mappedBy = "cartao")
     private Proposta proposta;

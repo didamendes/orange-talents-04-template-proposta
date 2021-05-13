@@ -3,7 +3,6 @@ package br.com.zup.bloqueio;
 import br.com.zup.cartao.Cartao;
 import br.com.zup.cartao.CartaoClient;
 import br.com.zup.cartao.CartaoRepository;
-import br.com.zup.cartao.model.ResultadoBloqueio;
 import br.com.zup.cartao.model.SolicitacaoBloqueio;
 import br.com.zup.exception.NenhumRegistroEncontado;
 import br.com.zup.proposta.PropostaController;
@@ -55,7 +54,7 @@ public class BloqueioController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new BloqueioResponse(bloqueio));
     }
 
 }
