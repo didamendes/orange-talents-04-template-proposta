@@ -10,7 +10,7 @@ import java.time.LocalDate;
 
 import static com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING;
 
-public class AvisoViagemRequest {
+public class SolicitacaoAvisoViagem {
 
     @NotNull
     @FutureOrPresent

@@ -1,7 +1,9 @@
 package br.com.zup.cartao;
 
+import br.com.zup.cartao.model.ResultadoAvisoViagem;
 import br.com.zup.cartao.model.ResultadoBloqueio;
 import br.com.zup.cartao.model.SolicitacaoBloqueio;
+import br.com.zup.viagem.SolicitacaoAvisoViagem;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,5 +22,8 @@ public interface CartaoClient {
 
     @RequestMapping(method = POST, value ="/cartoes/{id}/bloqueios", produces = MediaType.APPLICATION_JSON_VALUE)
     ResultadoBloqueio bloqueio(@PathVariable("id") String id, @RequestBody SolicitacaoBloqueio solicitacaoBloqueio);
+
+    @RequestMapping(method = POST, value = "/cartoes/{id}/avisos", produces = MediaType.APPLICATION_JSON_VALUE)
+    ResultadoAvisoViagem viagem(@PathVariable("id") String id, @RequestBody SolicitacaoAvisoViagem solicitacaoAvisoViagem);
 
 }

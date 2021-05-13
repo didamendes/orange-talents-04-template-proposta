@@ -1,10 +1,8 @@
 package br.com.zup.cartao;
 
 import br.com.zup.proposta.Proposta;
-import br.com.zup.proposta.PropostaController;
 import br.com.zup.proposta.PropostaRepository;
 import br.com.zup.proposta.StatusSolicitacao;
-import br.com.zup.proposta.analise.SolicitacaoAnalise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,8 @@ public class CartaoScheduling {
 
     private final Logger logger = LoggerFactory.getLogger(CartaoScheduling.class);
 
-    @Scheduled(cron = "${cron}")
+//    @Scheduled(cron = "${cron}")
+    @Scheduled(fixedDelay = 10 * 60 * 1000, initialDelay = 5 * 60 * 1000)
     @Transactional
     public void associarCartao() {
             List<Proposta> propostas = propostaRepository.findAllByStatusSolicitacaoAndCartaoIsNull(StatusSolicitacao.ELEGIVEL);

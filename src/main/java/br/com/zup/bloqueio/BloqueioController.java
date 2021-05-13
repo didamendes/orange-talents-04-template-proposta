@@ -30,7 +30,7 @@ public class BloqueioController {
     @Autowired
     private BloqueioResopitory bloqueioResopitory;
 
-    private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
+    private final Logger logger = LoggerFactory.getLogger(BloqueioController.class);
 
     @PostMapping(path = "/{id}")
     @Transactional
@@ -51,7 +51,7 @@ public class BloqueioController {
             bloqueioResopitory.save(bloqueio);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.unprocessableEntity().build();
         }
 
         return ResponseEntity.ok(new BloqueioResponse(bloqueio));
