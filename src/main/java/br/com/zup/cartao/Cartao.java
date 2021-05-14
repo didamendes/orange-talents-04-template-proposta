@@ -2,13 +2,16 @@ package br.com.zup.cartao;
 
 import br.com.zup.biometria.Biometria;
 import br.com.zup.bloqueio.Bloqueio;
+import br.com.zup.carteira.Carteira;
+import br.com.zup.carteira.Tipo;
 import br.com.zup.proposta.Proposta;
 import br.com.zup.viagem.AvisoViagem;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Cartao {
@@ -35,6 +38,9 @@ public class Cartao {
 
     @OneToMany(mappedBy = "cartao")
     private Set<AvisoViagem> avisoViagems;
+
+    @OneToMany(mappedBy = "cartao")
+    private Set<Carteira> carteiras;
 
     @OneToOne(mappedBy = "cartao")
     private Proposta proposta;
@@ -65,5 +71,11 @@ public class Cartao {
 
     public void bloquear() {
         this.status = Status.BLOQUEADO;
+    }
+
+    public boolean isAssociado(Tipo tipo) {
+        Set<Carteira> carteirasTipo = carteiras.stream().filter(carteira -> carteira.getEmissor().equals(tipo)).collect(Collectors.toSet());
+
+        return carteirasTipo.size() > BigDecimal.ZERO.longValue();
     }
 }
