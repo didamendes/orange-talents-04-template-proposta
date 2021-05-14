@@ -5,6 +5,7 @@ import br.com.zup.cartao.CartaoClient;
 import br.com.zup.cartao.CartaoRepository;
 import br.com.zup.cartao.model.SolicitacaoInclusaoCarteira;
 import br.com.zup.exception.NenhumRegistroEncontado;
+import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,20 @@ import javax.validation.Valid;
 @RequestMapping("/carteiras")
 public class CarteiraController {
 
-    @Autowired
+    private final Tracer tracer;
+
     private CartaoClient cartaoClient;
 
-    @Autowired
     private CartaoRepository cartaoRepository;
 
-    @Autowired
     private CarteiraRepository carteiraRepository;
+
+    public CarteiraController(Tracer tracer, CartaoClient cartaoClient, CartaoRepository cartaoRepository, CarteiraRepository carteiraRepository) {
+        this.tracer = tracer;
+        this.cartaoClient = cartaoClient;
+        this.cartaoRepository = cartaoRepository;
+        this.carteiraRepository = carteiraRepository;
+    }
 
     private final Logger logger = LoggerFactory.getLogger(CarteiraController.class);
 

@@ -1,6 +1,8 @@
 package br.com.zup.proposta;
 
 import br.com.zup.proposta.analise.ResultadoAnaliseClient;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,18 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RequestMapping("/propostas")
 public class PropostaController {
 
-    @Autowired
+    private final Tracer tracer;
+
     private PropostaRepository propostaRepository;
 
-    @Autowired
     private ResultadoAnaliseClient resultadoAnaliseClient;
+
+    @Autowired
+    public PropostaController(Tracer tracer, PropostaRepository propostaRepository, ResultadoAnaliseClient resultadoAnaliseClient) {
+        this.tracer = tracer;
+        this.propostaRepository = propostaRepository;
+        this.resultadoAnaliseClient = resultadoAnaliseClient;
+    }
 
     private final Logger logger = LoggerFactory.getLogger(PropostaController.class);
 
@@ -44,6 +53,7 @@ public class PropostaController {
     @PostMapping
     @Transactional
     public ResponseEntity<PropostaResponse> salvar(@Valid @RequestBody PropostaRequest propostaRequest) {
+        Span span = tracer.activeSpan();
         logger.info(" Proposta do cliente= {} com salario= {} recebida ", propostaRequest.getNome(), propostaRequest.getSalario());
         Proposta proposta = propostaRequest.converter();
         boolean exists = propostaRepository.existsByDocumento(proposta.getDocumento());
@@ -57,7 +67,8 @@ public class PropostaController {
         proposta.analisar(resultadoAnaliseClient);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(proposta.getId()).toUri();
-
+        span.setTag("Nova Proposta", "diogo.souza@zup.com.br");
+        span.log("Teste de LOG com Jaeger no Salvar Proposta !!! ");
         return ResponseEntity.created(uri).body(new PropostaResponse(proposta));
     }
 
