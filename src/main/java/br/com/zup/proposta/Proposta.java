@@ -20,6 +20,7 @@ public class Proposta {
     private Long id;
 
     @Column(name = "documento", nullable = false)
+    @Convert(converter = AttributeEncryptor.class)
     private String documento;
 
     @Column(name = "email", nullable = false)
